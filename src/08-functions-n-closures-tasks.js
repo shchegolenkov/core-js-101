@@ -23,8 +23,8 @@
  *   getComposition(Math.sin, Math.asin)(x) => Math.sin(Math.asin(x))
  *
  */
-function getComposition(/* f, g */) {
-  throw new Error('Not implemented');
+function getComposition(f, g) {
+  return (x) => f(g(x));
 }
 
 
@@ -44,8 +44,10 @@ function getComposition(/* f, g */) {
  *   power05(16) => 4
  *
  */
-function getPowerFunction(/* exponent */) {
-  throw new Error('Not implemented');
+function getPowerFunction(exponent) {
+  return function f(num) {
+    return num ** exponent;
+  };
 }
 
 
@@ -81,8 +83,12 @@ function getPolynom() {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  const cached = new Map();
+  return function memoized(x) {
+    if (!cached.has(x)) cached.set(x, func(x));
+    return cached.get(x);
+  };
 }
 
 
@@ -101,8 +107,17 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  return function innerRetry() {
+    try {
+      return func();
+    } catch (error) {
+      if (attempts > 1) {
+        return innerRetry();
+      }
+      throw error;
+    }
+  };
 }
 
 
@@ -147,8 +162,10 @@ function logger(/* func, logFunc */) {
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-function partialUsingArguments(/* fn, ...args1 */) {
-  throw new Error('Not implemented');
+function partialUsingArguments(fn, ...args1) {
+  return function func(...args) {
+    return fn(...args1, ...args);
+  };
 }
 
 
@@ -169,8 +186,12 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  let res = startFrom - 1;
+  return function nextNum() {
+    res += 1;
+    return res;
+  };
 }
 
 
